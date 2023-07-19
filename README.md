@@ -5,7 +5,7 @@ A multimodule kotlin jvm app building native  with GraalVM
 ## Stack
 #### JVM: Java 17
 #### Web : [Vertx](https://vertx.io/)
-#### Serialization: [Kotlinx.Serialization](https://kotlinlang.org/api/kotlinx.serialization/)
+<!-- #### Serialization: [Kotlinx.Serialization](https://kotlinlang.org/api/kotlinx.serialization/) -->
 #### Dependency Injection: [Koin](https://insert-koin.io/)
 #### Persistence: [Flyway](https://flywaydb.org/) + [Agroal](https://agroal.github.io/) + [JOOQ](https://www.jooq.org/)
 

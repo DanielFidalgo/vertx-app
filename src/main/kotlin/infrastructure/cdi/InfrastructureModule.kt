@@ -5,25 +5,72 @@ import com.github.fidalgotech.jooq.DslContext
 import infrastructure.config.common.AppConfig
 import infrastructure.resources.Resource
 import infrastructure.resources.RootResource
+import io.micrometer.core.instrument.MeterRegistry
+import io.micrometer.core.instrument.Tags
+import io.micrometer.core.instrument.binder.jvm.ClassLoaderMetrics
+import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics
+import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics
+import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics
+import io.micrometer.core.instrument.binder.system.DiskSpaceMetrics
+import io.micrometer.core.instrument.binder.system.ProcessorMetrics
+import io.micrometer.core.instrument.binder.system.UptimeMetrics
+import io.micrometer.core.instrument.composite.CompositeMeterRegistry
+import io.micrometer.prometheus.PrometheusConfig
+import io.micrometer.prometheus.PrometheusMeterRegistry
+import io.opentelemetry.api.OpenTelemetry
+import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator
+import io.opentelemetry.context.propagation.ContextPropagators
+import io.opentelemetry.sdk.OpenTelemetrySdk
+import io.opentelemetry.sdk.trace.SdkTracerProvider
 import io.vertx.core.Vertx
 import io.vertx.core.VertxOptions
 import io.vertx.core.http.HttpServer
 import io.vertx.core.http.HttpServerOptions
 import io.vertx.ext.web.Router
+import io.vertx.micrometer.MicrometerMetricsOptions
+import io.vertx.tracing.opentelemetry.OpenTelemetryOptions
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
+import java.io.File
 import javax.sql.DataSource
+
 
 @Module
 @ComponentScan("Infrastructure")
 class InfrastructureModule {
 
     @Single
-    fun vertx(): Vertx {
-        val options = VertxOptions();
+    fun openTelemetry(): OpenTelemetry {
+        val sdkTracerProvider = SdkTracerProvider.builder().build()
+        return OpenTelemetrySdk.builder()
+            .setTracerProvider(sdkTracerProvider)
+            .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance()))
+            .buildAndRegisterGlobal()
+    }
+
+    @Single
+    fun micrometer(appConfig: AppConfig): MeterRegistry {
+        val registry = CompositeMeterRegistry()
+        registry.add(PrometheusMeterRegistry(PrometheusConfig.DEFAULT))
+        val tags = Tags.of("service", appConfig.name(), "env", appConfig.env().label)
+        ClassLoaderMetrics(tags).bindTo(registry)
+        JvmMemoryMetrics(tags).bindTo(registry)
+        JvmGcMetrics(tags).bindTo(registry)
+        JvmThreadMetrics(tags).bindTo(registry)
+        UptimeMetrics(tags).bindTo(registry)
+        ProcessorMetrics(tags).bindTo(registry)
+        DiskSpaceMetrics(File(System.getProperty("user.dir")), tags).bindTo(registry)
+        return registry
+    }
+
+    @Single
+    fun vertx(openTelemetry: OpenTelemetry, meterRegistry: MeterRegistry): Vertx {
+        val options = VertxOptions()
         options.preferNativeTransport = true
+        options.tracingOptions = OpenTelemetryOptions(openTelemetry)
+        options.metricsOptions = MicrometerMetricsOptions().setMicrometerRegistry(meterRegistry).setEnabled(true)
         return Vertx.vertx(options)
     }
 
@@ -39,6 +86,7 @@ class InfrastructureModule {
         options.isTcpNoDelay = true
         options.isTcpQuickAck = true
         options.port = appConfig.port()
+
         return vertx.createHttpServer(options)
     }
 

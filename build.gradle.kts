@@ -21,9 +21,15 @@ repositories {
 dependencies {
     implementation(libs.vertx.openapi)
     implementation(libs.vertx.kotlin)
+    implementation(libs.vertx.opentelemetry)
+    implementation(libs.vertx.micrometer)
+    implementation(libs.micrometer.prometheus)
     implementation(libs.koin.core)
     implementation(libs.koin.annotations)
     implementation(libs.sql)
+    implementation(libs.log.slf4j.jul)
+    implementation(libs.log.logback)
+    runtimeOnly(libs.log.logback.mdc)
     implementation("com.h2database:h2:2.1.214")
     jooqGenerator("com.h2database:h2:2.1.214")
     ksp(libs.koin.ksp)
@@ -65,18 +71,24 @@ graalvmNative {
 }
 
 jib {
-    from{
-        image = "istio/distroless:latest"
-    }
-    to {
-        image = "local/${rootProject.name}:latest"
+    if (project.hasProperty("buildNative")) {
+        from{
+            image = "istio/distroless:latest"
+        }
+        pluginExtensions {
+            pluginExtension {
+                implementation = "com.google.cloud.tools.jib.gradle.extension.nativeimage.JibNativeImageExtension"
+                properties = mapOf("imageName" to "${rootProject.name}")
+            }
+        }
+    } else {
+        from{
+            image = "istio/distroless:latest"
+        }
     }
 
-    pluginExtensions{
-        pluginExtension {
-            implementation = "com.google.cloud.tools.jib.gradle.extension.nativeimage.JibNativeImageExtension"
-            properties = mapOf("imageName" to "${rootProject.name}")
-        }
+    to {
+        image = "local/${rootProject.name}:latest"
     }
 }
 
