@@ -1,10 +1,13 @@
 package infrastructure
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.fidalgotech.flyway.FlywayMigrate
 import infrastructure.cdi.AppModule
 import infrastructure.resources.Resource
 import io.vertx.core.Vertx
 import io.vertx.core.http.HttpServer
+import io.vertx.core.json.jackson.DatabindCodec
 import io.vertx.ext.web.Router
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -23,9 +26,21 @@ class Application : KoinComponent {
     init {
         SLF4JBridgeHandler.removeHandlersForRootLogger()
         SLF4JBridgeHandler.install()
+
         startKoin { modules(AppModule().module) }
+
+        registerCodecModules()
+
         FlywayMigrate.migrate(dataSource)
+
         resources.forEach(Resource::configure)
         server.requestHandler(router).listen()
+    }
+
+    private fun registerCodecModules() {
+        DatabindCodec.mapper().registerKotlinModule()
+        DatabindCodec.prettyMapper().registerKotlinModule()
+        DatabindCodec.mapper().registerModule(JavaTimeModule())
+        DatabindCodec.prettyMapper().registerModule(JavaTimeModule())
     }
 }

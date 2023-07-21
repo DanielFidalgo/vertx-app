@@ -1,10 +1,33 @@
 [
 {
+  "name":"[Lcom.fasterxml.jackson.databind.deser.Deserializers;"
+},
+{
+  "name":"[Lcom.fasterxml.jackson.databind.deser.KeyDeserializers;"
+},
+{
+  "name":"[Lcom.fasterxml.jackson.databind.deser.ValueInstantiators;"
+},
+{
+  "name":"[Lcom.fasterxml.jackson.databind.ser.Serializers;"
+},
+{
   "name":"[Lio.agroal.pool.ConnectionHandler;"
 },
 {
+  "name":"api.dto.in.UserCreate",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String"] }]
+},
+{
   "name":"ch.qos.logback.classic.AsyncAppender",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
+  "queryAllPublicMethods":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"setIncludeCallerData","parameterTypes":["boolean"] }
+  ]
 },
 {
   "name":"ch.qos.logback.classic.Logger",
@@ -17,6 +40,10 @@
 {
   "name":"ch.qos.logback.classic.encoder.PatternLayoutEncoder",
   "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"ch.qos.logback.classic.pattern.ClassOfCallerConverter",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
@@ -48,11 +75,19 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"ch.qos.logback.classic.pattern.MethodOfCallerConverter",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"ch.qos.logback.classic.pattern.RelativeTimeConverter",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"ch.qos.logback.classic.pattern.ThreadConverter",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"ch.qos.logback.classic.pattern.color.HighlightingCompositeConverter",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
@@ -71,6 +106,10 @@
 {
   "name":"ch.qos.logback.core.pattern.PatternLayoutEncoderBase",
   "methods":[{"name":"setPattern","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"com.fasterxml.jackson.databind.ext.Java7SupportImpl",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.sun.management.GarbageCollectionNotificationInfo"
@@ -95,12 +134,19 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"domain.users.User"
+},
+{
   "name":"infrastructure.logging.LogbackSpanEventAppender",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"infrastructure.logging.OpenTelemetryAppender",
   "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"infrastructure.tables.records.UsersRecord",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
@@ -310,6 +356,10 @@
   "fields":[{"name":"producerLimit"}]
 },
 {
+  "name":"io.opentelemetry.instrumentation.logback.v1_0.OpenTelemetryAppender",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"io.reactiverse.contextual.logging.LogbackConverter",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -408,6 +458,9 @@
 {
   "name":"java.lang.Long",
   "fields":[{"name":"TYPE"}]
+},
+{
+  "name":"java.lang.Object"
 },
 {
   "name":"java.lang.ProcessHandle",
@@ -524,11 +577,69 @@
   "methods":[{"name":"getUnsafe","parameterTypes":[] }]
 },
 {
-  "name":"kotlin.reflect.jvm.internal.ReflectionFactoryImpl"
+  "name":"kotlin.Metadata",
+  "queryAllDeclaredMethods":true,
+  "methods":[
+    {"name":"bv","parameterTypes":[] }, 
+    {"name":"d1","parameterTypes":[] }, 
+    {"name":"d2","parameterTypes":[] }, 
+    {"name":"k","parameterTypes":[] }, 
+    {"name":"mv","parameterTypes":[] }, 
+    {"name":"pn","parameterTypes":[] }, 
+    {"name":"xi","parameterTypes":[] }, 
+    {"name":"xs","parameterTypes":[] }
+  ]
+},
+{
+  "name":"kotlin.jvm.internal.DefaultConstructorMarker"
+},
+{
+  "name":"kotlin.reflect.jvm.internal.ReflectionFactoryImpl",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"kotlin.reflect.jvm.internal.impl.resolve.scopes.DescriptorKindFilter",
+  "allPublicFields":true
 },
 {
   "name":"org.h2.Driver",
   "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.jooq.impl.SQLDataType"
+},
+{
+  "name":"org.jooq.util.cubrid.CUBRIDDataType"
+},
+{
+  "name":"org.jooq.util.derby.DerbyDataType"
+},
+{
+  "name":"org.jooq.util.firebird.FirebirdDataType"
+},
+{
+  "name":"org.jooq.util.h2.H2DataType"
+},
+{
+  "name":"org.jooq.util.hsqldb.HSQLDBDataType"
+},
+{
+  "name":"org.jooq.util.ignite.IgniteDataType"
+},
+{
+  "name":"org.jooq.util.mariadb.MariaDBDataType"
+},
+{
+  "name":"org.jooq.util.mysql.MySQLDataType"
+},
+{
+  "name":"org.jooq.util.postgres.PostgresDataType"
+},
+{
+  "name":"org.jooq.util.sqlite.SQLiteDataType"
+},
+{
+  "name":"org.jooq.util.yugabytedb.YugabyteDBDataType"
 },
 {
   "name":"org.slf4j.Logger"

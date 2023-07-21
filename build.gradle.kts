@@ -3,10 +3,10 @@ import org.jetbrains.kotlin.ir.backend.js.compile
 plugins {
     kotlin("jvm") version "1.8.20"
     id("com.google.devtools.ksp") version "1.8.20-1.0.11"
-    id("org.graalvm.buildtools.native") version "0.9.21"
+    id("org.graalvm.buildtools.native") version "0.9.23"
     id("com.google.cloud.tools.jib") version "3.3.1"
     id("org.flywaydb.flyway") version "9.20.0"
-    id("nu.studer.jooq") version "8.2"
+    id("nu.studer.jooq") version "8.2.1"
     application
 }
 
@@ -21,6 +21,9 @@ repositories {
 dependencies {
     implementation(libs.vertx.openapi)
     implementation(libs.vertx.kotlin)
+    implementation(libs.jackson.databind)
+    implementation(libs.jackson.module.kotlin)
+    implementation(libs.jackson.module.jsr310)
     implementation(libs.vertx.opentelemetry)
     implementation(libs.vertx.micrometer)
     implementation(libs.micrometer.prometheus)
@@ -83,7 +86,7 @@ jib {
         }
     } else {
         from{
-            image = "istio/distroless:latest"
+            image = "eclipse-temurin:17.0.7_7-jre-alpine"
         }
     }
 

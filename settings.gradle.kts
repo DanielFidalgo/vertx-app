@@ -22,7 +22,10 @@ dependencyResolutionManagement {
             library("jooq", "org.jooq:jooq:3.18.5")
             library("agroal", "io.agroal:agroal-pool:2.2")
             library("flyway", "org.flywaydb:flyway-core:9.20.0")
-            library("sql", "com.github.fidalgotech:sql:230717-031827")
+            library("sql", "com.github.fidalgotech:sql:230720-014536")
+            library("jackson.databind", "com.fasterxml.jackson.core:jackson-databind:2.15.0")
+            library("jackson.module.kotlin", "com.fasterxml.jackson.module:jackson-module-kotlin:2.15.0")
+            library("jackson.module.jsr310", "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.0")
         }
 
         create("testLibs") {

@@ -21,21 +21,21 @@ class RootResource(router: Router): Resource(router) {
         get("/health-check", metrics())
     }
 
-    fun getRoot() = Handler<RoutingContext> {
+    private fun getRoot() = Handler<RoutingContext> {
         Logger.getGlobal().info("this is the root")
         it.end("asdasdasd")
     }
 
-    fun pong() = Handler<RoutingContext> {
+    private fun pong() = Handler<RoutingContext> {
         it.json(Json.obj(
             "date" to Instant.now(),
             "response" to "pong"
         ))
     }
 
-    fun metrics() = Handler<RoutingContext> {
-        var registry = BackendRegistries.getDefaultNow() as CompositeMeterRegistry
-        var prometheus = registry.registries.first(PrometheusMeterRegistry::class::isInstance) as PrometheusMeterRegistry
+    private fun metrics() = Handler<RoutingContext> {
+        val registry = BackendRegistries.getDefaultNow() as CompositeMeterRegistry
+        val prometheus = registry.registries.first(PrometheusMeterRegistry::class::isInstance) as PrometheusMeterRegistry
         it.end(prometheus.scrape())
     }
 }
