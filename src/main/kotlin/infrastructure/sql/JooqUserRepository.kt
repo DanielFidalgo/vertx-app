@@ -14,15 +14,18 @@ import org.jooq.impl.DSL
 import org.koin.core.annotation.Single
 
 @Single
-class JooqUserRepository(private val context: DslContext): UserRepository {
+class JooqUserRepository(private val context: DslContext) : UserRepository {
 
     override fun insert(domains: Set<User>) {
         context.transactional {
             val current = DSL.using(it)
-            val queries = domains
-                .map { d -> d.toInsert(current) }
-                .map { r -> current.insertInto(USERS).set(r) }
-            current.batch(queries).execute()
+            val queries = domains.map { d -> d.toInsert(current) }
+                                 .map { r ->
+                                     current.insertInto(USERS)
+                                            .set(r)
+                                 }
+            current.batch(queries)
+                   .execute()
         }
     }
 
@@ -31,27 +34,31 @@ class JooqUserRepository(private val context: DslContext): UserRepository {
             val current = DSL.using(it)
             val queries = domains
                 .map { d ->
-                    var query = current.update(USERS).set(d.toUpdate(current))
+                    val query = current.update(USERS)
+                                       .set(d.toUpdate(current))
                     d.id?.let { id -> query.where(USERS.ID.eq(id)) } ?: query
                 }
-            current.batch(queries).execute()
+            current.batch(queries)
+                   .execute()
         }
     }
 
     override fun deleteById(ids: Set<String>) {
         context.transactional {
             val current = DSL.using(it)
-            current.delete(USERS).where(USERS.ID.`in`(ids)).execute()
+            current.delete(USERS)
+                   .where(USERS.ID.`in`(ids))
+                   .execute()
         }
     }
 
     override fun find(query: UserQuery): List<User> {
         return context.reader
-            .select()
-            .from(USERS)
-            .where(conditions(query))
-            .fetchInto(UsersRecord::class.java)
-            .map { it.toDomain() }
+                      .select()
+                      .from(USERS)
+                      .where(conditions(query))
+                      .fetchInto(UsersRecord::class.java)
+                      .map { it.toDomain() }
     }
 
     override fun findByIds(ids: Set<String>): List<User> {

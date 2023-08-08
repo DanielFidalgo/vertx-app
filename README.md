@@ -20,7 +20,7 @@ Your Application may rely on some reflections from dependencies.
 This app can execute with GraalVM's tracing agent to support these cases.
 To run with the agent:
 ```shell
-./gradlew clean run -PgraalvmAgent --continue
+./gradlew clean run -PgraalvmAgent --continue --stacktrace
 ```
 This will store the configuration files under [META-INF/native-config](service/src/main/resources/META-INF/native-config) in the service Module
 

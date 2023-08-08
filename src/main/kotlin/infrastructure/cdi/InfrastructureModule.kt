@@ -45,7 +45,8 @@ class InfrastructureModule {
 
     @Single
     fun openTelemetry(): OpenTelemetry {
-        val sdkTracerProvider = SdkTracerProvider.builder().build()
+        val sdkTracerProvider = SdkTracerProvider.builder()
+            .build()
         return OpenTelemetrySdk.builder()
             .setTracerProvider(sdkTracerProvider)
             .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance()))
@@ -78,6 +79,7 @@ class InfrastructureModule {
 
     @Single
     fun router(vertx: Vertx): Router {
+
         return Router.router(vertx)
     }
 
@@ -100,13 +102,15 @@ class InfrastructureModule {
     @Single
     @Named("writer-ds")
     fun writer(appConfig: AppConfig): DataSource {
-        return DatasourceFactory.AGROAL.create(appConfig.writerConfig())
+        return DatasourceFactory.AGROAL
+            .create(appConfig.writerConfig())
     }
 
     @Single
     @Named("reader-ds")
     fun reader(appConfig: AppConfig): DataSource {
-        return DatasourceFactory.AGROAL.create(appConfig.readerConfig())
+        return DatasourceFactory.AGROAL
+            .create(appConfig.readerConfig())
     }
 
     @Single
