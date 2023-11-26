@@ -7,6 +7,7 @@ import domain.users.UserRepository
 import infrastructure.sql.mappers.UserMapper.toDomain
 import infrastructure.sql.mappers.UserMapper.toInsert
 import infrastructure.sql.mappers.UserMapper.toUpdate
+import infrastructure.tables.daos.UsersDao
 import infrastructure.tables.records.UsersRecord
 import infrastructure.tables.references.USERS
 import org.jooq.Condition
@@ -15,7 +16,7 @@ import org.koin.core.annotation.Single
 
 @Single
 class JooqUserRepository(private val context: DslContext) : UserRepository {
-
+    val dao = UsersDao(context.writer.configuration())
     override fun insert(domains: Set<User>) {
         context.transactional {
             val current = DSL.using(it)

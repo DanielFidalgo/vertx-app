@@ -24,10 +24,12 @@ class RootResource(router: Router) : Resource(router) {
     private fun getRoot() = Handler<RoutingContext> {
         Logger.getGlobal()
             .info("this is the root")
-        
+        it.response().statusCode = 200
+        it.end()
     }
 
     private fun pong() = Handler<RoutingContext> {
+        it.response().statusCode = 200
         it.json(
             Json.obj(
                 "date" to Instant.now(),
@@ -40,6 +42,7 @@ class RootResource(router: Router) : Resource(router) {
         val registry = BackendRegistries.getDefaultNow() as CompositeMeterRegistry
         val prometheus = registry.registries
             .first(PrometheusMeterRegistry::class::isInstance) as PrometheusMeterRegistry
+        it.response().statusCode = 200
         it.end(prometheus.scrape())
     }
 }

@@ -2,13 +2,9 @@ package infrastructure.config
 
 import com.github.fidalgotech.JdbcConfig
 import infrastructure.config.common.AppConfig
-import infrastructure.config.common.Env
 import java.time.Duration
 
 class StubConfig: AppConfig() {
-    override fun env(): Env {
-        return Env.STUB
-    }
 
     override fun writerConfig(): JdbcConfig {
         return JdbcConfig(

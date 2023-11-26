@@ -1,9 +1,6 @@
 package infrastructure.cdi
 
-import infrastructure.config.BetaConfig
-import infrastructure.config.DevConfig
-import infrastructure.config.ProdConfig
-import infrastructure.config.StagingConfig
+import infrastructure.config.EnvConfig
 import infrastructure.config.StubConfig
 import infrastructure.config.common.AppConfig
 import infrastructure.config.common.Env
@@ -16,10 +13,11 @@ class AppModule {
     fun appConfig(): AppConfig {
         val env = System.getenv("ENV")
         return when (Env.getByLabel(env)) {
-            Env.PROD -> ProdConfig()
-            Env.BETA -> BetaConfig()
-            Env.STAGING -> StagingConfig()
-            Env.DEV -> DevConfig()
+            Env.PROD,
+            Env.BETA,
+            Env.STAGING,
+            Env.DEV -> EnvConfig()
+
             else -> StubConfig()
         }
     }

@@ -27,7 +27,6 @@ import io.vertx.core.Vertx
 import io.vertx.core.VertxOptions
 import io.vertx.core.http.HttpServer
 import io.vertx.core.http.HttpServerOptions
-import io.vertx.core.json.jackson.DatabindCodec
 import io.vertx.ext.web.Router
 import io.vertx.micrometer.MicrometerMetricsOptions
 import io.vertx.tracing.opentelemetry.OpenTelemetryOptions

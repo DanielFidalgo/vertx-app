@@ -4,9 +4,12 @@ import com.github.fidalgotech.JdbcConfig
 import org.jooq.SQLDialect
 
 abstract class AppConfig {
-    private val port = System.getenv(APP_PORT)?.toInt() ?: defaultAppPort
-
-    abstract fun env(): Env
+    private val port = System.getenv(APP_PORT)
+        ?.toInt() ?: defaultAppPort
+    private val env = Env.getByLabel(System.getenv("ENV"))
+    fun env(): Env {
+        return env
+    }
 
     fun name(): String {
         return APP_NAME

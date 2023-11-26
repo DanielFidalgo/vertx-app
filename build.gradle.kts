@@ -1,11 +1,11 @@
 import org.jetbrains.kotlin.ir.backend.js.compile
 
 plugins {
-    kotlin("jvm") version "1.8.20"
-    id("com.google.devtools.ksp") version "1.8.20-1.0.11"
-    id("org.graalvm.buildtools.native") version "0.9.23"
-    id("com.google.cloud.tools.jib") version "3.3.1"
-    id("org.flywaydb.flyway") version "9.20.0"
+    kotlin("jvm") version "1.9.20"
+    id("com.google.devtools.ksp") version "1.9.20-1.0.13"
+    id("org.graalvm.buildtools.native") version "0.9.28"
+    id("com.google.cloud.tools.jib") version "3.4.0"
+    id("org.flywaydb.flyway") version "10.0.1"
     id("nu.studer.jooq") version "8.2.1"
     application
 }
@@ -21,12 +21,12 @@ repositories {
 dependencies {
     implementation(libs.vertx.openapi)
     implementation(libs.vertx.kotlin)
-    implementation(libs.jackson.databind)
-    implementation(libs.jackson.module.kotlin)
-    implementation(libs.jackson.module.jsr310)
     implementation(libs.vertx.opentelemetry)
     implementation(libs.vertx.micrometer)
     implementation(libs.micrometer.prometheus)
+    implementation(libs.jackson.databind)
+    implementation(libs.jackson.module.kotlin)
+    implementation(libs.jackson.module.jsr310)
     implementation(libs.koin.core)
     implementation(libs.koin.annotations)
     implementation(libs.sql)
@@ -37,14 +37,16 @@ dependencies {
     jooqGenerator("com.h2database:h2:2.1.214")
     ksp(libs.koin.ksp)
     testImplementation(kotlin("test"))
+    testImplementation("org.junit-pioneer:junit-pioneer:2.1.0")
 }
 
 tasks.test {
     useJUnitPlatform()
 }
 
+var javaVersion by extra(21)
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(javaVersion)
 }
 
 application {
@@ -59,8 +61,8 @@ graalvmNative {
     binaries {
         named("main") {
             javaLauncher.set(javaToolchains.launcherFor {
-                languageVersion.set(JavaLanguageVersion.of(17))
-                vendor.set(JvmVendorSpec.matching("GraalVM Community"))
+                languageVersion.set(JavaLanguageVersion.of(21))
+
             })
             mainClass.set("MainKt")
             fallback.set(false)
@@ -95,7 +97,7 @@ jib {
     }
 }
 
-val h2Url by extra("jdbc:h2:file:${buildDir}/jooq;INIT=CREATE SCHEMA IF NOT EXISTS jooq\\;SET SCHEMA jooq;MODE=MySQL;")
+val h2Url by extra("jdbc:h2:file:${layout.buildDirectory.get()}/jooq;INIT=CREATE SCHEMA IF NOT EXISTS jooq\\;SET SCHEMA jooq;MODE=MySQL;")
 val h2User by extra("sa")
 val h2Password by extra("")
 flyway {
@@ -140,7 +142,7 @@ jooq {
                     }
                     target.apply {
                         packageName = "infrastructure"
-                        directory = "${buildDir}/generated/main/kotlin/jooq/"
+                        directory = "${layout.buildDirectory.get()}/generated/main/kotlin/jooq/"
                     }
                     strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
                 }
@@ -148,4 +150,5 @@ jooq {
         }
     }
 }
-tasks.getByName("generateJooq").dependsOn(tasks.getByName("flywayMigrate"))
+tasks.getByName("generateJooq")
+    .dependsOn(tasks.getByName("flywayMigrate"))
