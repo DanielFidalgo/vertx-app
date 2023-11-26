@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.ir.backend.js.compile
-
 plugins {
     kotlin("jvm") version "1.9.20"
     id("com.google.devtools.ksp") version "1.9.20-1.0.13"
@@ -33,8 +31,8 @@ dependencies {
     implementation(libs.log.slf4j.jul)
     implementation(libs.log.logback)
     runtimeOnly(libs.log.logback.mdc)
-    implementation("com.h2database:h2:2.1.214")
-    jooqGenerator("com.h2database:h2:2.1.214")
+    implementation("com.h2database:h2:2.2.224")
+    jooqGenerator("com.h2database:h2:2.2.224")
     ksp(libs.koin.ksp)
     testImplementation(kotlin("test"))
     testImplementation("org.junit-pioneer:junit-pioneer:2.1.0")
